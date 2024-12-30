@@ -89,7 +89,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
             variant="h7"
             fontFamily={FONTS.Regular}
             style={{
-              color: theme == 'dark' ? Colors.dark_text : Colors.light_text,
+              color: theme == 'dark' ? Colors.dark_text : Colors.richBlack,
             }}
           >
             {label}
@@ -123,9 +123,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
           style={styles(theme === 'dark').textInput}
           editable={!disabled}
           secureTextEntry={isPassword && isHidden}
-          placeholderTextColor={
-            theme == 'dark' ? Colors.dark_text : Colors.richBlack
-          }
+          placeholderTextColor={Colors.light_text}
         />
         {isPassword && (
           <TouchableOpacity

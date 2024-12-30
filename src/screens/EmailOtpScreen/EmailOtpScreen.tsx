@@ -1,14 +1,23 @@
+import React, { FC, useState } from 'react';
+import CustomInput from '../../components/CustomInput/CustomInput';
 import { View, StyleSheet, Text, ScrollView } from 'react-native';
-import React, { useState } from 'react';
 import BackButton from '../../components/BackButton/BackButton';
 import CenteredLogo from '../../components/CenteredLogo/CenteredLogo';
-import CustomInput from '../../components/CustomInput/CustomInput';
 import { useForm, Controller } from 'react-hook-form';
 import CustomSubmitButton from '../../components/CustomButton/CustomSubmitButton';
 import { navigate } from '../../utils/NavigationUtil';
 import { Routes } from '../../navigation/Routes';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigation/Routes';
 
-const EmailScreen: React.FC = () => {
+type Props = NativeStackScreenProps<
+  RootStackParamList,
+  Routes.EMAIL_OTP_SCREEN
+>;
+
+const EmailOtpScreen = ({ route }: Props) => {
+  const { email: paramsEmail } = route.params;
+
   const {
     handleSubmit,
     control,
@@ -20,7 +29,7 @@ const EmailScreen: React.FC = () => {
     },
   });
 
-  const [email, setEmail] = useState<string>('');
+  const [email, setEmail] = useState<string>(paramsEmail);
   const [password, setPassword] = useState<string>('');
   const [otp, setOtp] = useState<string>('');
   const [showOTP, setShowOTP] = useState<boolean>(false);
@@ -30,9 +39,9 @@ const EmailScreen: React.FC = () => {
     setLoading(true);
     setShowOTP(true);
     setEmail(data.email);
-    // setPassword(data.password);
+    setPassword(data.password);
     // Navigation to EmailOTPScreen
-    navigate(Routes.EMAIL_OTP_SCREEN, { email });
+    navigate(Routes.EMAIL_OTP_SCREEN);
   };
 
   return (
@@ -58,11 +67,8 @@ const EmailScreen: React.FC = () => {
               autoFocus={false}
               placeholder={'Eg: me@gmail.com'}
               keyboardType={'email-address'}
-              value={value}
-              onChangeCallBack={(newVal) => {
-                onChange(newVal);
-                setEmail(newVal);
-              }}
+              value={email}
+              disabled={true}
               onBlur={onBlur}
               error={errors.email && errors.email.message}
             />
@@ -103,17 +109,15 @@ const EmailScreen: React.FC = () => {
         /> */}
 
         {/* EMAIL - OTP */}
-        {/* {showOTP && (
-          <CustomInput
-            label={'ENTER OTP'}
-            autoFocus={false}
-            placeholder={'Fill the OTP'}
-            keyboardType={'number-pad'}
-            value={otp}
-            onChangeCallBack={(newVal) => setOtp(newVal)}
-            resend={true}
-          />
-        )} */}
+        <CustomInput
+          label={'ENTER OTP'}
+          autoFocus={false}
+          placeholder={'Fill the OTP'}
+          keyboardType={'number-pad'}
+          value={otp}
+          onChangeCallBack={(newVal) => setOtp(newVal)}
+          resend={true}
+        />
       </ScrollView>
       <View
         style={{
@@ -125,7 +129,7 @@ const EmailScreen: React.FC = () => {
       >
         <CustomSubmitButton
           name={'Submit'}
-          disabled={email === ''}
+          disabled={otp === ''}
           loading={loading}
           onPress={handleSubmit(onSubmit)}
         />
@@ -133,6 +137,8 @@ const EmailScreen: React.FC = () => {
     </View>
   );
 };
+
+export default EmailOtpScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -144,5 +150,3 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
-
-export default EmailScreen;
