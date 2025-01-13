@@ -25,12 +25,12 @@ const EmailOtpScreen = ({ route }: Props) => {
   } = useForm({
     defaultValues: {
       email: '',
-      password: '',
+      emailOtp: '',
     },
   });
 
   const [email, setEmail] = useState<string>(paramsEmail);
-  const [password, setPassword] = useState<string>('');
+  // const [password, setPassword] = useState<string>('');
   const [otp, setOtp] = useState<string>('');
   const [showOTP, setShowOTP] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -39,14 +39,15 @@ const EmailOtpScreen = ({ route }: Props) => {
     setLoading(true);
     setShowOTP(true);
     setEmail(data.email);
-    setPassword(data.password);
+    setOtp(data.otp);
+    // setPassword(data.password);
     // Navigation to EmailOTPScreen
     navigate(Routes.EMAIL_OTP_SCREEN);
   };
 
   return (
     <View style={styles.container}>
-      <BackButton onPress={() => navigate(Routes.LOGIN_SCREEN)} />
+      <BackButton onPress={() => navigate(Routes.EMAIL_SCREEN)} />
       <CenteredLogo />
 
       {/* Input */}
@@ -80,56 +81,65 @@ const EmailOtpScreen = ({ route }: Props) => {
         {/* <Controller
           control={control}
           rules={{
-            maxLength: 20,
-            required: true,
-            pattern: {
-              value:
-                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,20}$/,
-              message:
-                'Please enter a secure password containing 8-20 characters, including at least one uppercase letter, one lowercase letter, one number, and one special character (e.g., @, #, $, etc.).',
-            },
+        maxLength: 20,
+        required: true,
+        pattern: {
+          value:
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,20}$/,
+          message:
+            'Please enter a secure password containing 8-20 characters, including at least one uppercase letter, one lowercase letter, one number, and one special character (e.g., @, #, $, etc.).',
+        },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
-            <CustomInput
-              label={'ENTER PASSWORD'}
-              autoFocus={false}
-              placeholder={'8-20 Characters'}
-              keyboardType={'visible-password'}
-              value={value}
-              onChangeCallBack={(newVal) => {
-                onChange(newVal);
-                setPassword(newVal);
-              }}
-              isPassword={true}
-              onBlur={onBlur}
-              error={errors.password?.message}
-            />
+        <CustomInput
+          label={'ENTER PASSWORD'}
+          autoFocus={false}
+          placeholder={'8-20 Characters'}
+          keyboardType={'visible-password'}
+          value={value}
+          onChangeCallBack={(newVal) => {
+            onChange(newVal);
+            setPassword(newVal);
+          }}
+          isPassword={true}
+          onBlur={onBlur}
+          error={errors.password?.message}
+        />
           )}
           name={'password'}
         /> */}
 
         {/* EMAIL - OTP */}
-        <CustomInput
-          label={'ENTER OTP'}
-          autoFocus={false}
-          placeholder={'Fill the OTP'}
-          keyboardType={'number-pad'}
-          value={otp}
-          onChangeCallBack={(newVal) => setOtp(newVal)}
-          resend={true}
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+            pattern: {
+              value: /^\d{6}$/,
+              message: 'Enter a valid 6-digit OTP',
+            },
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <CustomInput
+              label={'ENTER OTP'}
+              autoFocus={false}
+              placeholder={'Fill the OTP'}
+              keyboardType={'number-pad'}
+              value={otp}
+              maxLength={6}
+              resend={true}
+              onBlur={onBlur}
+              onChangeCallBack={(newVal) => setOtp(newVal)}
+              error={errors.emailOtp && errors.emailOtp.message}
+            />
+          )}
+          name={'emailOtp'}
         />
       </ScrollView>
-      <View
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          width: '100%',
-          marginHorizontal: 10,
-        }}
-      >
+      <View style={styles.buttonContainer}>
         <CustomSubmitButton
-          name={'Submit'}
-          disabled={otp === ''}
+          name={'VERIFY EMAIL ID '}
+          disabled={otp.length < 6}
           loading={loading}
           onPress={handleSubmit(onSubmit)}
         />
@@ -148,5 +158,11 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginTop: 10,
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    marginHorizontal: 10,
   },
 });
