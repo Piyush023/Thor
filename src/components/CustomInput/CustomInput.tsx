@@ -133,9 +133,11 @@ const CustomInput: React.FC<CustomInputProps> = ({
           >
             <Icon
               name={isHidden ? 'eye-off' : 'eye'}
-              color={Colors.dark_text}
+              color={theme == 'dark' ? Colors.dark_text : Colors.richBlack}
               size={RFValue(15)}
-              style={{ marginHorizontal: 10 }}
+              style={{
+                marginHorizontal: 10,
+              }}
             />
           </TouchableOpacity>
         )}

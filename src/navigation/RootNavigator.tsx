@@ -3,9 +3,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import LoginScreen from '../screens/LoginScreen/LoginScreen';
 import EmailScreen from '../screens/EmailScreen/EmailScreen';
-import { Routes } from './Routes';
+import { Routes, RootStackParamList } from './Routes';
 import EmailOtpScreen from '../screens/EmailOtpScreen/EmailOtpScreen';
-import { RootStackParamList } from './Routes';
+import SetPasswordScreen from '../screens/SetPasswordScreen/SetPasswordScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -23,6 +23,13 @@ const RootNavigator = () => {
       <Stack.Screen
         name={Routes.EMAIL_OTP_SCREEN}
         component={EmailOtpScreen}
+        initialParams={{
+          email: '',
+        }}
+      />
+      <Stack.Screen
+        name={Routes.SET_PASSWORD_SCREEN}
+        component={SetPasswordScreen}
         initialParams={{
           email: '',
         }}

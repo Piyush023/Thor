@@ -9,8 +9,6 @@ import { navigate } from '../../utils/NavigationUtil';
 import { Routes } from '../../navigation/Routes';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/Routes';
-import CustomText from '../../components/CustomText/CustomText';
-import { FONTS } from '../../constants/Fonts';
 import { Colors } from '../../constants/Colors';
 
 type Props = NativeStackScreenProps<
@@ -18,7 +16,7 @@ type Props = NativeStackScreenProps<
   Routes.EMAIL_OTP_SCREEN
 >;
 
-const EmailOtpScreen = ({ route }: Props) => {
+const SetPasswordScreen = ({ route }: Props) => {
   const { email: paramsEmail } = route.params;
 
   const {
@@ -28,25 +26,24 @@ const EmailOtpScreen = ({ route }: Props) => {
   } = useForm({
     defaultValues: {
       email: '',
-      emailOtp: '',
+      password: '',
     },
   });
 
   const [email, setEmail] = useState<string>(paramsEmail);
-  const [otp, setOtp] = useState<string>('');
-  const [otpError, setOtpError] = useState<boolean>(false);
+  const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit = (data: any) => {
-    console.log('click');
     setLoading(true);
     setEmail(data.email);
-    setOtp(data.otp);
     // TODO - Implement OTP Validation
     // if(otp !== OTP_FROM_BACKEND){
     // setOtpError(true);
     // }
-    navigate(Routes.SET_PASSWORD_SCREEN, { email });
+    // setPassword(data.password);
+    // Navigation to EmailOTPScreen
+    // navigate(Routes.PASS);
   };
 
   return (
@@ -66,50 +63,42 @@ const EmailOtpScreen = ({ route }: Props) => {
           disabled={true}
           error={errors.email && errors.email.message}
         />
-
-        {/* EMAIL - OTP */}
+        {/* Password */}
         <Controller
           control={control}
           rules={{
+            maxLength: 20,
             required: true,
             pattern: {
-              value: /^\d{6}$/,
-              message: 'Enter a valid 6-digit OTP',
+              value:
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,20}$/,
+              message:
+                'Please enter a secure password containing 8-20 characters, including at least one uppercase letter, one lowercase letter, one number, and one special character (e.g., @, #, $, etc.).',
             },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <CustomInput
-              label={'ENTER OTP'}
+              label={'ENTER PASSWORD'}
               autoFocus={false}
-              placeholder={'Fill the OTP'}
-              keyboardType={'number-pad'}
-              value={otp}
-              maxLength={6}
-              resend={true}
-              onBlur={onBlur}
+              placeholder={'8-20 Characters'}
+              keyboardType={'visible-password'}
+              value={value}
               onChangeCallBack={(newVal) => {
-                setOtp(newVal);
                 onChange(newVal);
+                setPassword(newVal);
               }}
-              error={errors.emailOtp?.message}
+              isPassword={true}
+              onBlur={onBlur}
+              error={errors.password?.message}
             />
           )}
-          name={'emailOtp'}
+          name={'password'}
         />
-        {otpError && (
-          <CustomText
-            variant={'h4'}
-            fontFamily={FONTS.Regular}
-            style={styles.errorText}
-          >
-            Wrong OTP! 2 Attempts Remaining
-          </CustomText>
-        )}
       </ScrollView>
       <View style={styles.buttonContainer}>
         <CustomSubmitButton
-          name={'VERIFY EMAIL ID '}
-          disabled={otp?.length < 6}
+          name={'NEXT'}
+          disabled={password.length < 8}
           loading={loading}
           onPress={handleSubmit(onSubmit)}
         />
@@ -118,7 +107,7 @@ const EmailOtpScreen = ({ route }: Props) => {
   );
 };
 
-export default EmailOtpScreen;
+export default SetPasswordScreen;
 
 const styles = StyleSheet.create({
   container: {

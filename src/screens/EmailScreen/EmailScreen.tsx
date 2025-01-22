@@ -21,8 +21,6 @@ const EmailScreen: React.FC = () => {
   });
 
   const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [otp, setOtp] = useState<string>('');
   const [showOTP, setShowOTP] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
