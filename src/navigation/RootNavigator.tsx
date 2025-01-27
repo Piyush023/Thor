@@ -1,21 +1,21 @@
-import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import EmailOtpScreen from '../screens/EmailOtpScreen/EmailOtpScreen';
+import EmailScreen from '../screens/EmailScreen/EmailScreen';
 import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import LoginScreen from '../screens/LoginScreen/LoginScreen';
-import EmailScreen from '../screens/EmailScreen/EmailScreen';
-import { Routes, RootStackParamList } from './Routes';
-import EmailOtpScreen from '../screens/EmailOtpScreen/EmailOtpScreen';
 import SetPasswordScreen from '../screens/SetPasswordScreen/SetPasswordScreen';
+import { RootStackParamList, Routes } from './Routes';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const RootNavigator = () => {
+const RootNavigator: React.FC = () => {
   return (
     <Stack.Navigator
       initialRouteName={Routes.LOGIN_SCREEN}
-      screenOptions={() => ({
+      screenOptions={{
         headerShown: false,
-      })}
+      }}
     >
       <Stack.Screen name={Routes.LOGIN_SCREEN} component={LoginScreen} />
       <Stack.Screen name={Routes.HOME_SCREEN} component={HomeScreen} />

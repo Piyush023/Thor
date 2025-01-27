@@ -13,12 +13,12 @@ import CustomText from '../../components/CustomText/CustomText';
 import { FONTS } from '../../constants/Fonts';
 import { Colors } from '../../constants/Colors';
 
-type Props = NativeStackScreenProps<
+type EmailOtpScreenProps = NativeStackScreenProps<
   RootStackParamList,
   Routes.EMAIL_OTP_SCREEN
 >;
 
-const EmailOtpScreen = ({ route }: Props) => {
+const EmailOtpScreen: React.FC<EmailOtpScreenProps> = ({ route }) => {
   const { email: paramsEmail } = route.params;
 
   const {

@@ -13,10 +13,10 @@ import { Colors } from '../../constants/Colors';
 
 type Props = NativeStackScreenProps<
   RootStackParamList,
-  Routes.EMAIL_OTP_SCREEN
+  Routes.SET_PASSWORD_SCREEN
 >;
 
-const SetPasswordScreen = ({ route }: Props) => {
+const SetPasswordScreen: React.FC<Props> = ({ route }) => {
   const { email: paramsEmail } = route.params;
 
   const {

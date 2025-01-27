@@ -6,10 +6,24 @@ export enum Routes {
   SET_PASSWORD_SCREEN = 'SET_PASSWORD_SCREEN',
 }
 
+type EmailOtpParams = {
+  email: string;
+};
+
+type SetPasswordParams = {
+  email: string;
+};
+
 export type RootStackParamList = {
   [Routes.LOGIN_SCREEN]: undefined;
   [Routes.HOME_SCREEN]: undefined;
   [Routes.EMAIL_SCREEN]: undefined;
-  [Routes.EMAIL_OTP_SCREEN]: { email: string };
-  [Routes.SET_PASSWORD_SCREEN]: { email: string };
+  [Routes.EMAIL_OTP_SCREEN]: EmailOtpParams;
+  [Routes.SET_PASSWORD_SCREEN]: SetPasswordParams;
 };
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends RootStackParamList {}
+  }
+}
