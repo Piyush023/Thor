@@ -1,14 +1,24 @@
-import { View, StyleSheet, Text, ScrollView } from 'react-native';
 import React, { useState } from 'react';
+import CustomInput from '../../components/CustomInput/CustomInput';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import BackButton from '../../components/BackButton/BackButton';
 import CenteredLogo from '../../components/CenteredLogo/CenteredLogo';
-import CustomInput from '../../components/CustomInput/CustomInput';
 import { useForm, Controller } from 'react-hook-form';
 import CustomSubmitButton from '../../components/CustomButton/CustomSubmitButton';
 import { navigate } from '../../utils/NavigationUtil';
 import { Routes } from '../../navigation/Routes';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigation/Routes';
+import { Colors } from '../../constants/Colors';
 
-const EmailScreen: React.FC = () => {
+type Props = NativeStackScreenProps<
+  RootStackParamList,
+  Routes.SET_PASSWORD_SCREEN
+>;
+
+const SetPasswordScreen: React.FC<Props> = ({ route }) => {
+  const { email: paramsEmail } = route.params;
+
   const {
     handleSubmit,
     control,
@@ -20,56 +30,41 @@ const EmailScreen: React.FC = () => {
     },
   });
 
-  const [email, setEmail] = useState<string>('');
-  const [showOTP, setShowOTP] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>(paramsEmail);
+  const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit = (data: any) => {
     setLoading(true);
-    setShowOTP(true);
     setEmail(data.email);
+    // TODO - Implement OTP Validation
+    // if(otp !== OTP_FROM_BACKEND){
+    // setOtpError(true);
+    // }
     // setPassword(data.password);
     // Navigation to EmailOTPScreen
-    navigate(Routes.EMAIL_OTP_SCREEN, { email });
+    // navigate(Routes.PASS);
   };
 
   return (
     <View style={styles.container}>
-      <BackButton onPress={() => navigate(Routes.LOGIN_SCREEN)} />
+      <BackButton onPress={() => navigate(Routes.EMAIL_SCREEN)} />
       <CenteredLogo />
 
       {/* Input */}
       <ScrollView style={styles.inputContainer}>
         {/* Email */}
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-            pattern: {
-              value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-              message: 'Enter a valid email address',
-            },
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <CustomInput
-              label={'EMAIL ADDRESS'}
-              autoFocus={false}
-              placeholder={'Eg: me@gmail.com'}
-              keyboardType={'email-address'}
-              value={value}
-              onChangeCallBack={(newVal) => {
-                onChange(newVal);
-                setEmail(newVal);
-              }}
-              onBlur={onBlur}
-              error={errors.email && errors.email.message}
-            />
-          )}
-          name={'email'}
+        <CustomInput
+          label={'EMAIL ADDRESS'}
+          autoFocus={false}
+          placeholder={'Eg: me@gmail.com'}
+          keyboardType={'email-address'}
+          value={email}
+          disabled={true}
+          error={errors.email && errors.email.message}
         />
-
         {/* Password */}
-        {/* <Controller
+        <Controller
           control={control}
           rules={{
             maxLength: 20,
@@ -77,8 +72,12 @@ const EmailScreen: React.FC = () => {
             pattern: {
               value:
                 /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,20}$/,
-              message:
-                'Please enter a secure password containing 8-20 characters, including at least one uppercase letter, one lowercase letter, one number, and one special character (e.g., @, #, $, etc.).',
+              message: `Password requirements:
+- 8-20 characters long
+- At least one uppercase letter
+- At least one lowercase letter 
+- At least one number
+- At least one special character (@, #, $, etc.)`,
             },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -98,32 +97,12 @@ const EmailScreen: React.FC = () => {
             />
           )}
           name={'password'}
-        /> */}
-
-        {/* EMAIL - OTP */}
-        {/* {showOTP && (
-          <CustomInput
-            label={'ENTER OTP'}
-            autoFocus={false}
-            placeholder={'Fill the OTP'}
-            keyboardType={'number-pad'}
-            value={otp}
-            onChangeCallBack={(newVal) => setOtp(newVal)}
-            resend={true}
-          />
-        )} */}
+        />
       </ScrollView>
-      <View
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          width: '100%',
-          marginHorizontal: 10,
-        }}
-      >
+      <View style={styles.buttonContainer}>
         <CustomSubmitButton
-          name={'Submit'}
-          disabled={email === ''}
+          name={'NEXT'}
+          disabled={password.length < 8}
           loading={loading}
           onPress={handleSubmit(onSubmit)}
         />
@@ -131,6 +110,8 @@ const EmailScreen: React.FC = () => {
     </View>
   );
 };
+
+export default SetPasswordScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -140,7 +121,15 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginTop: 10,
+    paddingHorizontal: 10,
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    marginHorizontal: 10,
+  },
+  errorText: {
+    color: Colors.errorColor,
   },
 });
-
-export default EmailScreen;

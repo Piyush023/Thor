@@ -41,6 +41,7 @@ const CustomSubmitButton: React.FC<CustomSubmitButtonProps> = ({
   }, [loading, animatedValue]);
 
   return (
+    // TODO - Implement Touchable Ripple Effect in the button
     <TouchableOpacity
       disabled={loading || disabled}
       onPress={onPress}

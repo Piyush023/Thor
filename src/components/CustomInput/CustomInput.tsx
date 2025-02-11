@@ -22,8 +22,6 @@ interface CustomInputProps {
   label?: string;
   placeHolder?: string;
   onChangeCallBack?: (newVal: string) => void;
-  //   setInputState?: (state: InputStatesType) => void;
-  //   inputState: InputStatesType;
   placeholder: string;
   maxLength?: number;
   value: string;
@@ -36,6 +34,8 @@ interface CustomInputProps {
   isPassword?: boolean;
   resend?: boolean;
   error?: string;
+  //   inputState: InputStatesType;
+  //   setInputState?: (state: InputStatesType) => void;
 }
 
 const CustomInput: React.FC<CustomInputProps> = ({
@@ -52,7 +52,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
   isPassword = false,
   resend = false,
   error,
-  customStyle = {},
+  // customStyle = {},
 }) => {
   const theme = useColorScheme();
   const { colors } = useTheme();
@@ -86,10 +86,10 @@ const CustomInput: React.FC<CustomInputProps> = ({
       {label && (
         <View>
           <CustomText
-            variant="h7"
+            variant="h9"
             fontFamily={FONTS.Regular}
             style={{
-              color: theme == 'dark' ? Colors.dark_text : Colors.light_text,
+              color: theme == 'dark' ? Colors.dark_text : Colors.richBlack,
             }}
           >
             {label}
@@ -123,9 +123,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
           style={styles(theme === 'dark').textInput}
           editable={!disabled}
           secureTextEntry={isPassword && isHidden}
-          placeholderTextColor={
-            theme == 'dark' ? Colors.dark_text : Colors.richBlack
-          }
+          placeholderTextColor={Colors.light_text}
         />
         {isPassword && (
           <TouchableOpacity
@@ -135,9 +133,11 @@ const CustomInput: React.FC<CustomInputProps> = ({
           >
             <Icon
               name={isHidden ? 'eye-off' : 'eye'}
-              color={Colors.dark_text}
+              color={theme == 'dark' ? Colors.dark_text : Colors.richBlack}
               size={RFValue(15)}
-              style={{ marginHorizontal: 10 }}
+              style={{
+                marginHorizontal: 10,
+              }}
             />
           </TouchableOpacity>
         )}
@@ -145,6 +145,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
         {resend && (
           <View>
             <TouchAbleText
+              // TODO -  Need to implement the Resend API Logic Here
               onPress={() => startTimer(true)}
               style={{ marginRight: 0, color: Colors.dark_text }}
               text={timeInterval.current ? `Resend in ${timer}` : 'Resend'}
