@@ -72,8 +72,12 @@ const SetPasswordScreen: React.FC<Props> = ({ route }) => {
             pattern: {
               value:
                 /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,20}$/,
-              message:
-                'Please enter a secure password containing 8-20 characters, including at least one uppercase letter, one lowercase letter, one number, and one special character (e.g., @, #, $, etc.).',
+              message: `Password requirements:
+- 8-20 characters long
+- At least one uppercase letter
+- At least one lowercase letter 
+- At least one number
+- At least one special character (@, #, $, etc.)`,
             },
           }}
           render={({ field: { onChange, onBlur, value } }) => (
